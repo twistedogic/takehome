@@ -1,5 +1,4 @@
-from .app import app
-from .database import init_db
+from .app import app, init_db
 
 init_db()
 
