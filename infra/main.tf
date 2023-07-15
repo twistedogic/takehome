@@ -33,4 +33,5 @@ resource "aws_instance" "take-me-home" {
   security_groups             = [aws_security_group.ssh_access.id]
   subnet_id                   = aws_subnet.public_subnet.id
   associate_public_ip_address = true
+  user_data                   = file("setup.sh")
 }
