@@ -1,0 +1,39 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+cli: "CLI client"
+user: "User" {
+  shape: person
+}
+
+vpc: "AWS VPC" {
+  gateway: "Gateway"
+  sg: "Security Group"
+  subnet: {
+    instance: "EC2 instance" {
+      db: "MySQL" {
+        shape: cylinder
+      }
+      app: "App" {
+        wsgi: "WSGI Server" {
+          worker_1: "Worker 1"
+          worker_2: "Worker 2"
+        }
+      }
+      sub-i: "Sub-interface" {
+        shape: queue
+      }
+    }
+  }
+}
+
+user -> vpc.gateway
+cli -> vpc.gateway
+vpc.gateway <-> vpc.sg
+vpc.sg <- vpc.subnet.instance: "Allow egress"
+vpc.sg -> vpc.subnet.instance.app: "Allow port 3000 ingress"
+vpc.sg -> vpc.subnet.instance: "Allow ssh"
+vpc.subnet.instance.app -> vpc.subnet.instance.sub-i -> vpc.subnet.instance.db
